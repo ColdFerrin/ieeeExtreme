@@ -50,6 +50,13 @@ class Main {
                 players.get(player).move(Integer.parseInt(toMoveSplit[0]), Integer.parseInt(toMoveSplit[1]));
             }
         }
+        
+        int i = 1;
+        for (Player p: players) {
+        	if (p.isWinner())
+        		System.out.println(i + " winner");
+        	i++;
+        }	
     }
 }
 
@@ -65,9 +72,33 @@ class Player {
         this.size = size;
         winner = false;
     }
-
+    
+    int direction = 1;
     void move(int places){
-         //THis function
+    	places = Math.abs(places);
+    	
+    	xPos += places * direction;
+    	if (direction > 0 && xPos > size - 1) {
+    		direction = -1;
+    		yPos--;
+    		int overflow = xPos - size - 1;
+    		xPos = size-1;
+    		// move in the other direction
+    		move(overflow);
+    	}
+    	else if (direction < 0 && xPos < 1) {
+    		if (yPos != 0) {
+    			direction = 1;
+    			yPos--;
+    			int overflow = 1 - xPos;
+    			xPos = 1;
+    			// move in the other direction
+    			move(overflow);
+    		}
+    		else if (xPos <= 0){
+    			winner = true;
+    		}
+    	}
     }
 
     void move(int xPos, int yPos){
